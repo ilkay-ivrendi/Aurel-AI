@@ -1,0 +1,129 @@
+{
+  "name": "aurel-ai",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "aurel-ai",
+  "sourceRoot": "apps/aurel-ai/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/aurel-ai/browser",
+        "index": "apps/aurel-ai/src/index.html",
+        "main": "apps/aurel-ai/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/aurel-ai/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/aurel-ai/src/favicon.ico", "apps/aurel-ai/src/assets"],
+        "styles": ["apps/aurel-ai/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "aurel-ai:build:production"
+        },
+        "development": {
+          "buildTarget": "aurel-ai:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "aurel-ai:build"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "aurel-ai:build"
+      }
+    },
+    "server": {
+      "dependsOn": ["build"],
+      "executor": "@angular-devkit/build-angular:server",
+      "options": {
+        "outputPath": "dist/apps/aurel-ai/server",
+        "main": "apps/aurel-ai/server.ts",
+        "tsConfig": "apps/aurel-ai/tsconfig.server.json",
+        "inlineStyleLanguage": "scss"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@angular-devkit/build-angular:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "aurel-ai:build:development",
+          "serverTarget": "aurel-ai:server:development"
+        },
+        "production": {
+          "browserTarget": "aurel-ai:build:production",
+          "serverTarget": "aurel-ai:server:production"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "prerender": {
+      "executor": "@angular-devkit/build-angular:prerender",
+      "options": {
+        "routes": ["/"]
+      },
+      "configurations": {
+        "development": {
+          "browserTarget": "aurel-ai:build:development",
+          "serverTarget": "aurel-ai:server:development"
+        },
+        "production": {
+          "browserTarget": "aurel-ai:build:production",
+          "serverTarget": "aurel-ai:server:production"
+        }
+      },
+      "defaultConfiguration": "production"
+    }
+  }
+}
