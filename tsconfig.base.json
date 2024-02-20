@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@aurel-ai/shared-ui": ["libs/shared-ui/src/index.ts"]
+      "@aurel-ai/shared-ui": ["libs/shared-ui/src/index.ts"],
+      "@aurel-ai/shell": ["libs/shell/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
