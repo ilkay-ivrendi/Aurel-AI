@@ -1,0 +1,12 @@
+.canvas-container {
+  width: 100%; /* Set width to 100% of the viewport width */
+  height: 100%; /* Set height to 100% of the viewport height */
+  display: flex; /* Use flexbox layout */
+  justify-content: center; /* Center the canvas horizontally */
+  align-items: center; /* Center the canvas vertically */
+}
+
+canvas {
+  width: 100%; /* Ensure canvas does not exceed container width */
+  height: 100%; /* Ensure canvas does not exceed container height */
+}

@@ -1,0 +1,9 @@
+{
+  "name": "three",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/three/src",
+  "prefix": "aurel-ai",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}
