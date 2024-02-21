@@ -8,16 +8,26 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/aurel-ai/browser",
         "index": "apps/aurel-ai/src/index.html",
         "main": "apps/aurel-ai/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/aurel-ai/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/aurel-ai/src/favicon.ico", "apps/aurel-ai/src/assets"],
-        "styles": ["apps/aurel-ai/src/styles.scss"],
+        "assets": [
+          "apps/aurel-ai/src/favicon.ico",
+          "apps/aurel-ai/src/assets"
+        ],
+        "styles": [
+          "@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "apps/aurel-ai/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -72,7 +82,9 @@
       }
     },
     "server": {
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "executor": "@angular-devkit/build-angular:server",
       "options": {
         "outputPath": "dist/apps/aurel-ai/server",
@@ -111,7 +123,9 @@
     "prerender": {
       "executor": "@angular-devkit/build-angular:prerender",
       "options": {
-        "routes": ["/"]
+        "routes": [
+          "/"
+        ]
       },
       "configurations": {
         "development": {
