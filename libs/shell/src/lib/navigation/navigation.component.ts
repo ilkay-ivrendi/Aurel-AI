@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -24,6 +24,7 @@ import { ThreeComponent } from '@aurel-ai/three';
   styleUrl: './navigation.component.scss',
 })
 export class NavigationComponent {
+  @Input() title: string = '';
   private breakpointObserver = inject(BreakpointObserver);
 
   isHandset$: Observable<boolean> = this.breakpointObserver

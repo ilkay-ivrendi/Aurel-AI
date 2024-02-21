@@ -15,10 +15,9 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       }
-      <span>shell</span>
+      <span>{{title}}</span>
     </mat-toolbar>
     <!-- Add Content Here -->
-    <h1>Welcome to Aurel-AI - ThreeJS Canvas</h1>
-    <aurel-ai-three></aurel-ai-three>
+    <aurel-ai-three [cameraZ]="50" [fieldOfView]="5"></aurel-ai-three>
   </mat-sidenav-content>
 </mat-sidenav-container>

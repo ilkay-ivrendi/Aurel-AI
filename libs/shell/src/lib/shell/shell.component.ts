@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationComponent } from '../navigation/navigation.component';
 
@@ -9,4 +9,6 @@ import { NavigationComponent } from '../navigation/navigation.component';
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })
-export class ShellComponent {}
+export class ShellComponent {
+  @Input() title = 'Shell';
+}
