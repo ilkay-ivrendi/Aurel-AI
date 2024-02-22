@@ -85,10 +85,13 @@ export class ThreeComponent implements AfterViewInit {
   }
 
   private startRenderingLoop() {
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: true,
+    });
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-
+  
     const render = () => {
       requestAnimationFrame(render);
 
