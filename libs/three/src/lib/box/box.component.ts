@@ -23,14 +23,7 @@ export class BoxComponent {
     this.cube = new THREE.Mesh(geometry, material);
 
     // Add the cube to the provided Three.js scene
-
     this.scene.add(this.cube);
-
-    // Add event listeners for mouse interactions
-    this.cube.userData = { component: this }; // Store a reference to the component
-    this.cube.addEventListener('mouseenter', this.onMouseEnter.bind(this));
-    this.cube.addEventListener('mouseleave', this.onMouseLeave.bind(this));
-    this.cube.addEventListener('click', this.onClick.bind(this));
   }
 
   onMouseEnter(): void {
