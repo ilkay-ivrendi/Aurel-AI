@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@aurel-ai/auth": ["libs/auth/src/index.ts"],
       "@aurel-ai/shared-ui": ["libs/shared-ui/src/index.ts"],
       "@aurel-ai/shell": ["libs/shell/src/index.ts"],
       "@aurel-ai/three": ["libs/three/src/index.ts"]
