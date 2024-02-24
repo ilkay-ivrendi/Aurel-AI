@@ -1,3 +1,4 @@
 <div class="canvas-container">
     <canvas #threecanvas id="three-canvas"></canvas>
-</div> 
+    <aurel-ai-box *ngIf="isSceneInitialized()" [scene]="scene" (cubeClicked)="onCubeClicked()" [color]="'red'"></aurel-ai-box>
+</div>

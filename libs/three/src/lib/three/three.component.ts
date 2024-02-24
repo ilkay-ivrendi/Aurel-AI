@@ -6,27 +6,26 @@ import {
   HostListener,
   Input,
   ViewChild,
+  signal,
 } from '@angular/core';
 
 import * as THREE from 'three';
 
 import { OrbitControls } from 'three/examples/jsm/controls/orbitControls';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
+import { BoxComponent } from '../box/box.component';
+import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 
 @Component({
   selector: 'aurel-ai-three',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BoxComponent],
   templateUrl: './three.component.html',
   styleUrl: './three.component.scss',
 })
 export class ThreeComponent implements AfterViewInit {
   @ViewChild('threecanvas', { static: false })
   private canvasRef!: ElementRef<HTMLCanvasElement>;
-
-  get canvas(): HTMLCanvasElement {
-    return this.canvasRef.nativeElement;
-  }
 
   // Stage Properties
   @Input({ alias: 'cameraZ' }) public cameraZ: number = 100;
@@ -36,10 +35,25 @@ export class ThreeComponent implements AfterViewInit {
 
   private camera!: THREE.Camera;
   private renderer!: THREE.WebGLRenderer;
-  private scene!: THREE.Scene;
+  public scene!: THREE.Scene;
+  isSceneInitialized = signal(false);
+
+  dragableObjects: any[] = [];
+  mouse!: THREE.Vector2;
+  raycaster!: THREE.Raycaster;
 
   private orbitControls!: OrbitControls;
   private gridHelper!: THREE.GridHelper;
+  private dragControls!: DragControls;
+
+  INTERSECTED: any;
+  theta = 0;
+  pointer = new THREE.Vector2();
+  radius = 5;
+
+  get canvas(): HTMLCanvasElement {
+    return this.canvasRef.nativeElement;
+  }
 
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
@@ -54,11 +68,7 @@ export class ThreeComponent implements AfterViewInit {
 
     this.loadGridHelper();
     this.loadOrbitControls();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event): void {
-    this.resizeCanvas();
+    // this.setuoDragControls();
   }
 
   private createScene() {
@@ -75,11 +85,7 @@ export class ThreeComponent implements AfterViewInit {
       this.farClippingPlane
     );
     this.camera.position.z = this.cameraZ;
-
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    this.scene.add(cube);
+    this.isSceneInitialized.set(true);
   }
 
   private getAspectRatio() {
@@ -94,11 +100,8 @@ export class ThreeComponent implements AfterViewInit {
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
 
-    // Add tone mapping and gamma correction if needed
-    // this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-
-    const aniamte = () => {
-      requestAnimationFrame(aniamte);
+    const animate = () => {
+      requestAnimationFrame(animate);
 
       if (this.orbitControls) {
         this.orbitControls.update();
@@ -106,8 +109,7 @@ export class ThreeComponent implements AfterViewInit {
 
       this.renderer.render(this.scene, this.camera);
     };
-    aniamte();
-    console.log('render loop started');
+    animate();
   }
 
   private resizeCanvas(): void {
@@ -123,7 +125,6 @@ export class ThreeComponent implements AfterViewInit {
       // Optionally, adjust aspect ratio here if needed
       this.getAspectRatio();
     }
-    console.log('resize canvas');
   }
 
   private loadOrbitControls() {
@@ -148,14 +149,11 @@ export class ThreeComponent implements AfterViewInit {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 10); // White light, full intensity
     directionalLight.position.set(1, 1, 1).normalize(); // Set light direction
     this.scene.add(directionalLight);
-
-    console.log('lights added');
   }
 
   private loadGridHelper() {
     this.gridHelper = new THREE.GridHelper(1000, 100);
     this.scene.add(this.gridHelper);
-    console.log('grid added');
   }
 
   private setupSkySphere() {
@@ -170,7 +168,6 @@ export class ThreeComponent implements AfterViewInit {
     }); // Create material with sky texture
     const skySphere = new THREE.Mesh(geometry, material); // Create sky sphere
     this.scene.add(skySphere); // Add sky sphere to scene
-    console.log('sky added');
   }
 
   private setupSkyBox() {
@@ -220,5 +217,70 @@ export class ThreeComponent implements AfterViewInit {
     // Create skydome mesh
     const skyDome = new THREE.Mesh(geometry, material);
     this.scene.add(skyDome); // Add skydome to the scene
+  }
+
+  setuoDragControls() {
+    const geometry = new THREE.BoxGeometry();
+    for (let i = 0; i < 200; i++) {
+      const object = new THREE.Mesh(
+        geometry,
+        new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
+      );
+
+      object.position.x = Math.random() * 30 - 15;
+      object.position.y = Math.random() * 15 - 7.5;
+      object.position.z = Math.random() * 20 - 10;
+
+      object.rotation.x = Math.random() * 2 * Math.PI;
+      object.rotation.y = Math.random() * 2 * Math.PI;
+      object.rotation.z = Math.random() * 2 * Math.PI;
+
+      object.scale.x = Math.random() * 2 + 1;
+      object.scale.y = Math.random() * 2 + 1;
+      object.scale.z = Math.random() * 2 + 1;
+
+      object.castShadow = true;
+      object.receiveShadow = true;
+
+      this.scene.add(object);
+
+      this.dragableObjects.push(object);
+    }
+
+    this.dragControls = new DragControls(
+      [...this.dragableObjects],
+      this.camera,
+      this.renderer.domElement
+    );
+
+    // Add event listener for 'drag' event
+    this.dragControls.addEventListener('drag', () => this.renderer);
+  }
+
+  onCubeClicked(): void {
+    console.log('Cube clicked!');
+    // Add your custom logic here
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.resizeCanvas();
+  }
+
+  @HostListener('window:click', ['$event'])
+  onClick(event: KeyboardEvent): void {
+    // Handle keydown event here
+    console.log('Click happened');
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    // Handle keydown event here
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  onKeyUp(event: KeyboardEvent): void {
+    // Handle keyup event here
+    console.log('Key Down Event!');
   }
 }
