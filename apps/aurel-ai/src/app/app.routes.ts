@@ -15,6 +15,7 @@ export const appRoutes: Route[] = [
       loadChildren: () => import('@aurel-ai/three').then((r) => r.THREE_ROUTES),
     },
   ]),
+  
   // Include the authentication routes
   ...AUTH_ROUTES, // Spread the authentication routes array
 
