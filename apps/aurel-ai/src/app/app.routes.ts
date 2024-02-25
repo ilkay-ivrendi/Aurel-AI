@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { AUTH_ROUTES } from '@aurel-ai/auth';
+import { NotFoundComponent } from '@aurel-ai/shared-ui';
 import { ShellService } from '@aurel-ai/shell';
 
 export const appRoutes: Route[] = [
@@ -11,13 +12,16 @@ export const appRoutes: Route[] = [
     },
     {
       path: 'three',
-      loadChildren: () =>
-        import('@aurel-ai/three').then((r) => r.THREE_ROUTES),
+      loadChildren: () => import('@aurel-ai/three').then((r) => r.THREE_ROUTES),
     },
   ]),
   // Include the authentication routes
   ...AUTH_ROUTES, // Spread the authentication routes array
-  
+
   // Fallback when no prior route is matched
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    pathMatch: 'full',
+  },
 ];
