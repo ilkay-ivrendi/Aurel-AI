@@ -10,12 +10,3 @@ canvas {
   width: 100% !important; /* Ensure canvas does not exceed container width */
   height: 100% !important; /* Ensure canvas does not exceed container height */
 }
-
-
-#aurel-ai-box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* Adjust position and styling as needed */
-}

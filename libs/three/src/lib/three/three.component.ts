@@ -15,6 +15,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/orbitControls';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import { BoxComponent } from '../box/box.component';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 
 @Component({
   selector: 'aurel-ai-three',
@@ -28,7 +29,7 @@ export class ThreeComponent implements AfterViewInit {
   private canvasRef!: ElementRef<HTMLCanvasElement>;
 
   // Stage Properties
-  @Input({ alias: 'cameraZ' }) public cameraZ: number = 100;
+  @Input({ alias: 'cameraZ' }) public cameraZ: number = 50;
   @Input() public fieldOfView: number = 75;
   @Input('nearClipping') public nearClippingPlane = 0.1;
   @Input('farClipping') public farClippingPlane = 10000;
@@ -65,9 +66,10 @@ export class ThreeComponent implements AfterViewInit {
     // this.setupSkySphere();
     this.setupSkyDome();
     this.setupLights(); // Add this line to set up lights
-
+    
     this.loadGridHelper();
     this.loadOrbitControls();
+    this.loadFbxModel();
     // this.setuoDragControls();
   }
 
@@ -133,11 +135,13 @@ export class ThreeComponent implements AfterViewInit {
       this.renderer.domElement
     );
     this.orbitControls.enableDamping = true;
-    this.orbitControls.dampingFactor = 0.25;
+    this.orbitControls.dampingFactor = 1.25;
     this.orbitControls.screenSpacePanning = false;
     this.orbitControls.maxPolarAngle = Math.PI / 2;
-    this.orbitControls.maxZoom = 10000;
+    this.orbitControls.maxZoom = 200;
     this.orbitControls.minZoom = 0.1;
+    this.orbitControls.target = new THREE.Vector3(0, 140, 0);
+    this.camera.position.y = 160;
   }
 
   private setupLights() {
@@ -217,6 +221,40 @@ export class ThreeComponent implements AfterViewInit {
     // Create skydome mesh
     const skyDome = new THREE.Mesh(geometry, material);
     this.scene.add(skyDome); // Add skydome to the scene
+  }
+
+  async loadFbxModel(): Promise<void> {
+    const fbxLoader = new FBXLoader();
+    const fbx = await fbxLoader.loadAsync('./assets/models/Ch48_nonPBR.fbx');
+
+    fbx.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        const material = child.material;
+        console.log(child);
+        if (material) {
+          // Set shininess to a fixed value
+          material.shininess = 30;
+          // Remove shininess map
+          material.shininessMap = null;
+        }
+
+        if (material.name == 'Ch48_hair') {
+          // Set opacity to 1 (fully opaque)
+          material.opacity = 1;
+          material.transparent = false;
+        }
+      }
+    });
+
+    this.scene.add(fbx);
+
+    // Set up camera to focus on the model's head with a portrait-like view
+    // const boundingBox = new THREE.Box3().setFromObject(fbx);
+    // const boundingBoxHelper = new THREE.Box3Helper(boundingBox, 0xffff00);
+    // this.scene.add(boundingBoxHelper);
+
+    // const center = new THREE.Vector3();
+    // boundingBox.getCenter(center);
   }
 
   setuoDragControls() {
