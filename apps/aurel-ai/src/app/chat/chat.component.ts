@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface Message {
   sender: string;
@@ -18,6 +19,7 @@ export interface Message {
     CommonModule,
     FormsModule,
     MatInputModule,
+    MatIconModule,
     MatButtonModule,
     FormsModule,
     FlexLayoutModule,
