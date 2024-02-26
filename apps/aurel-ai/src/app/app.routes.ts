@@ -11,6 +11,11 @@ export const appRoutes: Route[] = [
         import('./about/about.component').then((c) => c.AboutComponent),
     },
     {
+      path: 'chat',
+      loadComponent: () =>
+        import('./chat/chat.component').then((c) => c.ChatComponent),
+    },
+    {
       path: 'three',
       loadChildren: () => import('@aurel-ai/three').then((r) => r.THREE_ROUTES),
     },

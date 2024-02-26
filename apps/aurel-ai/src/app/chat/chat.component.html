@@ -1,0 +1,16 @@
+<div class="chat-container" fxLayout="column">
+    <div class="messages" fxLayout="column" fxLayoutAlign="start">
+        <div *ngFor="let message of messages" class="message" [class.sent]="message.sender === 'Me'"
+            [class.received]="message.sender !== 'Me'">
+            <div class="message-sender">{{ message.sender }}</div>
+            <div class="message-content">{{ message.content }}</div>
+            <div class="message-timestamp">{{ message.timestamp | date: 'shortTime' }}</div>
+        </div>
+    </div>
+    <div class="input-container" fxLayoutAlign="start center">
+        <mat-form-field class="input-field">
+            <input matInput [(ngModel)]="newMessage" placeholder="Type a message...">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+    </div>
+</div>
