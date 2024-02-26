@@ -4,7 +4,7 @@
             <mat-card-title>Login</mat-card-title>
         </mat-card-header>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <mat-form-field class="example-full-width">
+            <mat-form-field class="full-width">
                 <input matInput formControlName="username" placeholder="Username">
                 <mat-error
                     *ngIf="loginForm.controls['username'].invalid && (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)">
@@ -12,7 +12,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field class="full-width">
                 <input matInput formControlName="password" type="password" placeholder="Password">
                 <mat-error
                     *ngIf="loginForm.controls['password'].invalid && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
