@@ -6,6 +6,11 @@ import { ShellService } from '@aurel-ai/shell';
 export const appRoutes: Route[] = [
   ShellService.childRoutes([
     {
+      path: 'home',
+      loadComponent: () =>
+        import('./home/home.component').then((c) => c.HomeComponent),
+    },
+    {
       path: 'about',
       loadComponent: () =>
         import('./about/about.component').then((c) => c.AboutComponent),
