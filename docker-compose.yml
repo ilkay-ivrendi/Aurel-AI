@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  aurel-ai-server:
+    build:
+      context: .
+      dockerfile: apps/aurel-ai-server/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/aurel_ai_db
+    depends_on:
+      - mongo
+
+  aurel-ai:
+    build:
+      context: .
+      dockerfile: apps/aurel-ai/Dockerfile
+    ports:
+      - "80:80"
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"

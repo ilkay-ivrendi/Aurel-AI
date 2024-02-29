@@ -18,6 +18,10 @@
           "buildTarget": "aurel-ai-server:build:production"
         }
       }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/aurel-ai-server/Dockerfile . -t aurel-ai-server"
     }
   },
   "tags": []

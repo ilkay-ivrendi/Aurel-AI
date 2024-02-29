@@ -130,6 +130,10 @@
         }
       },
       "defaultConfiguration": "production"
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/aurel-ai/Dockerfile . -t aurel-ai"
     }
   }
 }
