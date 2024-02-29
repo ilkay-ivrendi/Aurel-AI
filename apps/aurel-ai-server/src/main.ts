@@ -15,13 +15,13 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Aurel-AI API')
+    .setDescription('You can find Aurel-AI endpoints and usage in this swagger')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/v1/swagger', app, document);
 
   await app.listen(port);
   Logger.log(
