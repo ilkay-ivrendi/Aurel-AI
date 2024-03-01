@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-
+import { databaseProviders } from './database.providers';
+import { CustomConfigModule } from '../../config/config.module';
 @Module({
-  imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/AurelDB'),
-  ],
+  imports: [CustomConfigModule],
+  providers: [...databaseProviders],
+  exports: [...databaseProviders],
 })
 export class DatabaseModule {}

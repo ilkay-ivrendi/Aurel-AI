@@ -1,13 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { UsersRepository } from '../database/repositories/users.repository';
+import { Model } from 'mongoose';
+import { User } from '../database/interfaces/user.interface';
+import { CreateUserDto } from './user.dto';
 
-export type User = any;
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor( @Inject('USER_MODEL')
+  private userModel: Model<User>) {}
 
-  async createUser(userData: any): Promise<any> {
-    // Implement createUser logic here
+  async createUser(userDTO: CreateUserDto): Promise<any> {
+    const createdCat = new this.userModel(userDTO);
+    return createdCat.save();
   }
 
   async findByEmail(email: string): Promise<any> {
@@ -26,22 +30,5 @@ export class UsersService {
   async getAllUsers(): Promise<any[]> {
     // Implement getAllUsers logic here
     return [];
-  }
-
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
-
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
   }
 }

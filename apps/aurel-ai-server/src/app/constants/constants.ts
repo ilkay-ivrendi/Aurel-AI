@@ -1,0 +1,8 @@
+export const DATABASE_CONNECTION = 'DATABASE_CONNECTION';
+export const MONGO_HOST = 'MONGO_HOST';
+export const MONGO_PORT = 'MONGO_PORT';
+export const MONGO_DATABASE = 'MONGO_DATABASE';
+export const MONGO_AUTH_SOURCE = 'MONGO_AUTH_SOURCE';
+export const MONGO_USER = 'MONGO_USER';
+export const MONGO_PASSWORD = 'MONGO_PASSWORD';
+export const USER_MODEL= 'USER_MODEL';
