@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 export interface Message {
   sender: string;
@@ -19,6 +20,7 @@ export interface Message {
     CommonModule,
     FormsModule,
     MatInputModule,
+    MatCardModule,
     MatIconModule,
     MatButtonModule,
     FormsModule,
@@ -28,13 +30,14 @@ export interface Message {
   styleUrl: './chat.component.scss',
 })
 export class ChatComponent {
-  messages: Message[] = [ {
-    sender: 'System',
-    content: "Hello There! How Can I Help You?",
-    timestamp: new Date(),
-  }];
+  messages: Message[] = [
+    {
+      sender: 'System',
+      content: 'Hello There! How Can I Help You?',
+      timestamp: new Date(),
+    },
+  ];
   newMessage: string = '';
-  
 
   sendMessage(): void {
     if (this.newMessage.trim() !== '') {

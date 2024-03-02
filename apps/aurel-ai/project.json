@@ -18,7 +18,7 @@
         "inlineStyleLanguage": "scss",
         "assets": ["apps/aurel-ai/src/favicon.ico", "apps/aurel-ai/src/assets"],
         "styles": [
-          "@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "material-design-icons-iconfont/dist/material-design-icons.css",
           "apps/aurel-ai/src/styles.scss"
         ],
         "scripts": []
