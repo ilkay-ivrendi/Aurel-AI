@@ -8,6 +8,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ThreeComponent } from '@aurel-ai/three';
 import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 import { Observable, map, shareReplay } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import {MatCardModule} from '@angular/material/card';
 
 @Component({
   selector: 'aurel-ai-shell',
@@ -21,7 +25,11 @@ import { Observable, map, shareReplay } from 'rxjs';
     ThreeComponent,
     RouterLink,
     RouterLinkActive,
-    RouterModule
+    RouterModule,
+    MatButtonModule,
+    MatMenuModule,
+    FlexLayoutModule ,
+    MatCardModule,
   ],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
