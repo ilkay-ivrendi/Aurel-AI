@@ -4,23 +4,48 @@
 
 $material-design-icons-font-directory-path: '~material-design-icons-iconfont/dist/fonts/';
 
-$my-primary: mat.define-palette(mat.$yellow-palette, A400);
-$my-accent: mat.define-palette(mat.$green-palette, 900, A700, A400);
+$aurel-light-primary: mat.define-palette(mat.$yellow-palette, A400);
+$aurel-light-accent: mat.define-palette(mat.$green-palette, 900, A700, A400);
+$aurel-light-warn: mat.define-palette(mat.$red-palette);
 
-// The "warn" palette is optional and defaults to red if not specified.
-$my-warn: mat.define-palette(mat.$red-palette);
+$aurel-custom-typoghraphy: mat.define-typography-config(
+  $font-family: "Arial, sans-serif",
+);
 
-$my-theme: mat.define-light-theme((
- color: (
-   primary: $my-primary,
-   accent: $my-accent,
-   warn: $my-warn,
- ),
- typography: mat.define-typography-config(),
- density: 0,
-));
+$aurel-dark-primary: mat.define-palette(mat.$indigo-palette, A400);
+$aurel-dark-accent: mat.define-palette(mat.$purple-palette, 900, A700, A400);
+$aurel-dark-warn: mat.define-palette(mat.$red-palette);
 
-// Emit theme-dependent styles for common features used across multiple components.
-@include mat.core-theme($my-theme);
+$aurel-light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $aurel-light-primary,
+      accent: $aurel-light-accent,
+      warn: $aurel-light-warn,
+    ),
+    typography: $aurel-custom-typoghraphy,
+    density: 0,
+  )
+);
 
-@include mat.all-component-themes($my-theme);
+$aurel-dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $aurel-dark-primary,
+      accent: $aurel-dark-accent,
+      warn: $aurel-dark-warn,
+    ),
+    typography: $aurel-custom-typoghraphy,
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($aurel-light-theme);
+
+body.light-theme {
+  @include mat.all-component-themes($aurel-light-theme);
+}
+
+body.dark-theme {
+  @include mat.all-component-themes($aurel-dark-theme);
+}

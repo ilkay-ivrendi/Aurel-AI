@@ -6,16 +6,14 @@
 
   .messages {
     flex: 2;
-    overflow-y: auto;
     padding: 10px;
+    overflow: auto;
   }
 
   mat-card {
     height: 88vh;
   }
 }
-
-
 
 .message {
   margin-bottom: 10px;

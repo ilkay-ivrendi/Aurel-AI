@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, HostBinding, Input, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,8 +11,8 @@ import { Observable, map, shareReplay } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {MatCardModule} from '@angular/material/card';
-
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 @Component({
   selector: 'aurel-ai-shell',
   standalone: true,
@@ -28,8 +28,9 @@ import {MatCardModule} from '@angular/material/card';
     RouterModule,
     MatButtonModule,
     MatMenuModule,
-    FlexLayoutModule ,
+    FlexLayoutModule,
     MatCardModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
@@ -44,4 +45,22 @@ export class ShellComponent {
       map((result) => result.matches),
       shareReplay()
     );
+
+  @HostBinding('class')
+  currentTheme: 'light-theme' | 'dark-theme' = 'light-theme';
+
+  isDarkMode: boolean = false;
+
+  onThemeChanged() {
+    const body = document.body;
+    if (this.isDarkMode) {
+      body.classList.remove('dark-theme');
+      body.classList.add('light-theme');
+    } else {
+      body.classList.remove('light-theme');
+      body.classList.add('dark-theme');
+    }
+    this.isDarkMode = !this.isDarkMode;
+    console.log(this.isDarkMode);
+  }
 }

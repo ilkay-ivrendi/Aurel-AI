@@ -15,10 +15,18 @@
             <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
                 <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
+
             }
             <span>{{title}}</span>
 
             <div fxFlex></div>
+            <mat-slide-toggle class="example-margin" [checked]="isDarkMode" (change)="onThemeChanged()">
+                Slide me!
+            </mat-slide-toggle>
+            <button mat-mini-fab (click)="onThemeChanged()"
+                aria-label="Example icon button with a home icon">
+                <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode'}}</mat-icon>
+            </button>
             <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                 <mat-icon>more_vert</mat-icon>
             </button>
@@ -36,8 +44,9 @@
                     <span>Disable alerts</span>
                 </button>
             </mat-menu>
-            <div fxLayoutAling="center center">
-                <img class="avatar-image" src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="user-avatar">
+            <div fxLayoutAling="center center" [matMenuTriggerFor]="menu">
+                <img class="avatar-image" src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+                    alt="user-avatar">
             </div>
         </mat-toolbar>
         <!-- Add Content Here -->
