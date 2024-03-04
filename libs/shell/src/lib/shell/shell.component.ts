@@ -38,6 +38,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 export class ShellComponent {
   @Input() title = 'Shell';
   private breakpointObserver = inject(BreakpointObserver);
+  isDarkMode: boolean = false;
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -45,11 +46,6 @@ export class ShellComponent {
       map((result) => result.matches),
       shareReplay()
     );
-
-  @HostBinding('class')
-  currentTheme: 'light-theme' | 'dark-theme' = 'light-theme';
-
-  isDarkMode: boolean = false;
 
   onThemeChanged() {
     const body = document.body;
@@ -61,6 +57,5 @@ export class ShellComponent {
       body.classList.add('dark-theme');
     }
     this.isDarkMode = !this.isDarkMode;
-    console.log(this.isDarkMode);
   }
 }

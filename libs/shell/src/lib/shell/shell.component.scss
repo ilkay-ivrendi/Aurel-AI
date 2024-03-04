@@ -33,3 +33,7 @@
   width: 45px;
   height: 45px;
 }
+
+::ng-deep .mat-mdc-menu-content {
+  padding: 0 !important;
+}

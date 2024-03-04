@@ -40,8 +40,6 @@ $aurel-dark-theme: mat.define-dark-theme(
   )
 );
 
-@include mat.all-component-themes($aurel-light-theme);
-
 body.light-theme {
   @include mat.all-component-themes($aurel-light-theme);
 }
@@ -49,3 +47,5 @@ body.light-theme {
 body.dark-theme {
   @include mat.all-component-themes($aurel-dark-theme);
 }
+
+@include mat.all-component-themes($aurel-light-theme);
