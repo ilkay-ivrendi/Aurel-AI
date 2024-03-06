@@ -12,6 +12,8 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/mat
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'aurel-ai-login',
@@ -25,6 +27,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     FlexLayoutModule,
     MatButtonModule,
     MatSlideToggleModule,
+    MatIconModule,
+    MatDividerModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -33,7 +37,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   ]
 })
 export class LoginComponent {
-  loginForm!: FormGroup;
+  loginForm!: FormGroup;  
+  showPassword: Boolean = false;
 
   constructor(private formBuilder: FormBuilder) {}
 

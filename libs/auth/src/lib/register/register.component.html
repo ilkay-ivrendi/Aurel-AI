@@ -21,11 +21,23 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field class="full-width">
-                <input matInput formControlName="password" type="password" placeholder="Password">
-                <mat-icon matSuffix>key</mat-icon>
+                <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Password">
+                <mat-icon matSuffix (click)="showPassword = !showPassword">
+                    {{showPassword ? 'key_off' :'key'}}
+                </mat-icon>
                 <mat-error
                     *ngIf="registerForm.controls['password'].invalid && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)">
                     Password is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <input matInput formControlName="password" [type]="showRepeatPassword ? 'text' : 'password'" placeholder="Repeat Password">
+                <mat-icon matSuffix (click)="showRepeatPassword = !showRepeatPassword">
+                    {{showRepeatPassword ? 'key_off' :'key'}}
+                </mat-icon>
+                <mat-error
+                    *ngIf="registerForm.controls['password'].invalid && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)">
+                    Repeat Password is required
                 </mat-error>
             </mat-form-field>
             <button mat-fab extended class="register-button" color="primary" type="submit">Register</button>

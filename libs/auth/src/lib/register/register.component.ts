@@ -41,6 +41,8 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class RegisterComponent {
   registerForm!: FormGroup;
+  showPassword: boolean = false;
+  showRepeatPassword: boolean = false;
 
   constructor(private formBuilder: FormBuilder) {}
 

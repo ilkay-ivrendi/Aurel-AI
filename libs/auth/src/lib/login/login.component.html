@@ -6,6 +6,7 @@
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <mat-form-field class="full-width">
                 <input matInput formControlName="username" placeholder="Username">
+                <mat-icon matSuffix>person</mat-icon>
                 <mat-error
                     *ngIf="loginForm.controls['username'].invalid && (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)">
                     Username is required
@@ -13,14 +14,18 @@
             </mat-form-field>
 
             <mat-form-field class="full-width">
-                <input matInput formControlName="password" type="password" placeholder="Password">
+                <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'"
+                    placeholder="Password">
+                <mat-icon matSuffix (click)="showPassword = !showPassword">
+                    {{showPassword ? 'key_off' :'key'}}
+                </mat-icon>
                 <mat-error
                     *ngIf="loginForm.controls['password'].invalid && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
                     Password is required
                 </mat-error>
             </mat-form-field>
 
-            <section class="remember-section"  fxLayoutAlign="start center">
+            <section class="remember-section" fxLayoutAlign="start center">
                 <mat-slide-toggle class="example-margin" color="primary">
                     Remember Me!
                 </mat-slide-toggle>
@@ -28,5 +33,33 @@
 
             <button mat-fab extended class="login-button" color="primary" type="submit">Login</button>
         </form>
+
+        <mat-divider></mat-divider>
+        <section>
+            <div class="social-button-row">
+                <div class="example-flex-container" fxLayoutAlign="space-around center">
+                    <div class="example-button-container">
+                        <button mat-fab color="" aria-label="Example icon button with a delete icon">
+                            <i class="bi bi-google"></i>
+                        </button>
+                    </div>
+                    <div class="example-button-container">
+                        <button mat-fab color="" aria-label="Example icon button with a bookmark icon">
+                            <i class="bi bi-github"></i>
+                        </button>
+                    </div>
+                    <div class="example-button-container">
+                        <button mat-fab color="" aria-label="Example icon button with a home icon">
+                            <i class="bi bi-instagram"></i>
+                        </button>
+                    </div>
+                    <div class="example-button-container">
+                        <button mat-fab color="" aria-label="Example icon button with a heart icon">
+                            <i class="bi bi-twitter-x"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </mat-card>
 </div>
