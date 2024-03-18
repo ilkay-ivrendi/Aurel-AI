@@ -7,8 +7,12 @@ import { LoginCredentials, RegisterCredentials } from './auth-interfaces';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private httpClient: HttpClient) {}
+
+  isAuthenticated = false;
   private apiUrl = '/api/auth';
+
+  constructor(private httpClient: HttpClient) {}
+
   login(body: LoginCredentials): Observable<any> {
     return this.httpClient.post(this.apiUrl + '/login', body);
   }
@@ -19,5 +23,11 @@ export class AuthService {
 
   logOut() {
     console.log('LogOut Clicked');
+    localStorage.removeItem("test");
+    this.isAuthenticated = false;
+  }
+
+  isLoggedIn(): boolean {
+    return this.isAuthenticated;
   }
 }
