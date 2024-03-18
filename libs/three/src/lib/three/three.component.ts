@@ -46,6 +46,9 @@ export class ThreeComponent implements AfterViewInit {
   private orbitControls!: OrbitControls;
   private gridHelper!: THREE.GridHelper;
   private dragControls!: DragControls;
+  private animationMixer!: THREE.AnimationMixer;
+  // Create a clock to measure time
+  clock = new THREE.Clock();
 
   INTERSECTED: any;
   theta = 0;
@@ -66,10 +69,11 @@ export class ThreeComponent implements AfterViewInit {
     // this.setupSkySphere();
     this.setupSkyDome();
     this.setupLights(); // Add this line to set up lights
-    
+
     this.loadGridHelper();
-    this.loadOrbitControls();
+
     this.loadFbxModel();
+    this.loadOrbitControls();
     // this.setuoDragControls();
   }
 
@@ -101,9 +105,16 @@ export class ThreeComponent implements AfterViewInit {
     });
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-
+    
     const animate = () => {
       requestAnimationFrame(animate);
+      
+      if (this.animationMixer) {
+        // Calculate deltaTime using the clock
+        const deltaTime = this.clock.getDelta();
+        this.animationMixer.update(deltaTime);
+        console.log("animation mixer is updating");
+      }
 
       if (this.orbitControls) {
         this.orbitControls.update();
@@ -226,6 +237,15 @@ export class ThreeComponent implements AfterViewInit {
   async loadFbxModel(): Promise<void> {
     const fbxLoader = new FBXLoader();
     const fbx = await fbxLoader.loadAsync('./assets/models/Ch48_nonPBR.fbx');
+    this.animationMixer = new THREE.AnimationMixer(fbx);
+    
+    const animations = await this.loadAnimations(); // Load locomotion animations
+    fbx.animations = animations;
+    fbx.castShadow = true;
+
+    console.log('Animations:', animations);
+    
+    this.playAnimationByName('idle', fbx.animations);
 
     fbx.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -248,16 +268,120 @@ export class ThreeComponent implements AfterViewInit {
 
     this.scene.add(fbx);
 
-    // Set up camera to focus on the model's head with a portrait-like view
-    // const boundingBox = new THREE.Box3().setFromObject(fbx);
-    // const boundingBoxHelper = new THREE.Box3Helper(boundingBox, 0xffff00);
-    // this.scene.add(boundingBoxHelper);
-
-    // const center = new THREE.Vector3();
-    // boundingBox.getCenter(center);
   }
 
-  setuoDragControls() {
+  async loadAnimations(): Promise<THREE.AnimationClip[]> {
+    // Load locomotion animations here and return the loaded animations as an array
+    // Example:
+    const animations: THREE.AnimationClip[] = [];
+    const animationIdle = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/idle.fbx'
+    );
+    animationIdle.name = 'idle';
+
+    const animationRunning = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/running.fbx'
+    );
+    animationRunning.name = 'running';
+
+    const animationWalking = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/walking.fbx'
+    );
+    animationWalking.name = 'walking';
+
+    const animationJump = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/jump.fbx'
+    );
+    animationJump.name = 'jump';
+
+    const animationLeftStrafe = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/left strafe.fbx'
+    );
+    animationLeftStrafe.name = 'left-strafe';
+
+    const animationLeftStrafeWalking = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/left strafe walking.fbx'
+    );
+    animationLeftStrafeWalking.name = 'left strafe walking baby';
+
+    const animationLeftTurn90 = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/left turn 90.fbx'
+    );
+    animationLeftTurn90.name = 'left-turn-90';
+
+    const animationLeftTurn = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/left turn.fbx'
+    );
+    animationLeftTurn.name = 'left-turn';
+
+    const animationRightStrafeWalking = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/right strafe walking.fbx'
+    );
+    animationLeftStrafeWalking.name = 'right-strafe-walking';
+
+    const animationRightTurn90 = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/right turn 90.fbx'
+    );
+    animationRightTurn90.name = 'right-turn-90';
+
+    const animationRightStrafe = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/right strafe.fbx'
+    );
+    animationRightStrafe.name = 'right-strafe';
+
+    const animationRightTurn = await this.loadAnimation(
+      './assets/animations/Locomotion Pack Astra/right turn.fbx'
+    );
+    animationRightTurn.name = 'right-turn';
+
+    // Add loaded animations to the array
+    animations.push(
+      animationIdle,
+      animationWalking,
+      animationJump,
+      animationRunning,
+      animationLeftStrafe,
+      animationLeftStrafeWalking,
+      animationLeftTurn,
+      animationLeftTurn90,
+      animationRightStrafe,
+      animationRightStrafeWalking,
+      animationRightTurn,
+      animationRightTurn90
+    );
+    return animations;
+  }
+
+  async loadAnimation(path: string): Promise<THREE.AnimationClip> {
+    const loader = new FBXLoader();
+    const fbx = await loader.loadAsync(path);
+    const mixer = new THREE.AnimationMixer(fbx);
+    const action = mixer.clipAction(fbx.animations[0]); // Assuming only one animation per FBX
+    action.clampWhenFinished = true;
+    // action.setLoop(,THREE.LoopRepeat);
+    return action.getClip(); // Return the AnimationClip
+  }
+
+private playAnimationByName(animationName: string, animations: THREE.AnimationClip[]): void {
+  if (!this.animationMixer) {
+    console.error('Animation mixer is not initialized or no actions are present.');
+    return;
+  }
+
+  // Find the animation clip by name
+  const clip = animations.find((clip) => clip.name === animationName);
+
+  if (clip) {
+    // Create animation action and play it
+    const animationAction = this.animationMixer.clipAction(clip);
+    console.log(clip, animationAction);
+    animationAction.play();
+  } else {
+    console.error(`Animation clip '${animationName}' not found.`);
+  }
+}
+
+  setupDragControls() {
     const geometry = new THREE.BoxGeometry();
     for (let i = 0; i < 200; i++) {
       const object = new THREE.Mesh(
