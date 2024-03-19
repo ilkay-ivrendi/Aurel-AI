@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../auth.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -71,30 +71,32 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      console.log('Form submitted successfully');
-      console.log('Username:', this.loginForm.value.username);
-      console.log('Password:', this.loginForm.value.password);
-      console.log('Remember:', this.loginForm.value.remember);
       // Here you can add your authentication logic
       this.authService.login(this.loginForm.value).subscribe({
         next: (value) => {
-          console.log('Success', value);
+          this.openSnackBar('Welcome ' + value.data.user_data.username, '👌');
         },
         error: (e) => {
-          console.log(e.error);
-          this.openSnackBar(e.message, 'Close');
+          if (e.status === 504) {
+            this.openSnackBar('Server is Unreachable!', '❌');
+            return;
+          }
+          if (e.status === 401) {
+            this.openSnackBar(e.error.message, '⚠️');
+            return;
+          }
+          this.openSnackBar(e.message, '❌');
         },
-        complete: () => {
-          console.info('complete');
-        },
+        complete: () => {},
       });
     } else {
-      console.log('Form is invalid');
-      this.openSnackBar('Form is invalid', 'Close');
+      this.openSnackBar('Form is invalid', '❌');
     }
   }
 
   openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

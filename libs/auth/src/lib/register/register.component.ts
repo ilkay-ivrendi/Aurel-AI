@@ -53,7 +53,7 @@ export class RegisterComponent {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -66,38 +66,29 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      console.log('Form submitted successfully');
-      console.log('Username:', this.registerForm.value.username);
-      console.log('Email:', this.registerForm.value.email);
-      console.log('Password:', this.registerForm.value.password);
-      console.log('Full Form:', this.registerForm.value);
-      // Here you can add your registration logic
       this.authService.register(this.registerForm.value).subscribe({
         next: (value) => {
-          console.log('Next:', value);
           if (value.error) {
-            this.openSnackBar(value.error, 'Close');
+            this.openSnackBar(value.error, '❌');
           } else {
-            this.openSnackBar(value.message, 'Close');
+            this.openSnackBar(value.message, '👌');
             console.log('Successfully Registered In. Redirecting...');
-            this.router.navigate(['/', 'login']);
+            this.router.navigate(['/ogin']);
           }
         },
         error: (error) => {
-          console.log(error.error);
-          this.openSnackBar(error.message, 'Close');
+          this.openSnackBar(error.message, '❌');
         },
-        complete: () => {
-          console.info('register form request complete!');
-        },
+        complete: () => {},
       });
     } else {
-      console.log('Form is invalid');
       this.openSnackBar('Form is invalid', '🤦‍♂️');
     }
   }
 
   openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

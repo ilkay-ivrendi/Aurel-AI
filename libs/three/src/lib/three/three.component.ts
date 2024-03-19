@@ -105,15 +105,14 @@ export class ThreeComponent implements AfterViewInit {
     });
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-    
+
     const animate = () => {
       requestAnimationFrame(animate);
-      
+
       if (this.animationMixer) {
         // Calculate deltaTime using the clock
         const deltaTime = this.clock.getDelta();
         this.animationMixer.update(deltaTime);
-        console.log("animation mixer is updating");
       }
 
       if (this.orbitControls) {
@@ -238,13 +237,11 @@ export class ThreeComponent implements AfterViewInit {
     const fbxLoader = new FBXLoader();
     const fbx = await fbxLoader.loadAsync('./assets/models/Ch48_nonPBR.fbx');
     this.animationMixer = new THREE.AnimationMixer(fbx);
-    
+
     const animations = await this.loadAnimations(); // Load locomotion animations
     fbx.animations = animations;
     fbx.castShadow = true;
 
-    console.log('Animations:', animations);
-    
     this.playAnimationByName('idle', fbx.animations);
 
     fbx.traverse((child) => {
@@ -267,7 +264,6 @@ export class ThreeComponent implements AfterViewInit {
     });
 
     this.scene.add(fbx);
-
   }
 
   async loadAnimations(): Promise<THREE.AnimationClip[]> {
@@ -362,24 +358,28 @@ export class ThreeComponent implements AfterViewInit {
     return action.getClip(); // Return the AnimationClip
   }
 
-private playAnimationByName(animationName: string, animations: THREE.AnimationClip[]): void {
-  if (!this.animationMixer) {
-    console.error('Animation mixer is not initialized or no actions are present.');
-    return;
-  }
+  private playAnimationByName(
+    animationName: string,
+    animations: THREE.AnimationClip[]
+  ): void {
+    if (!this.animationMixer) {
+      console.error(
+        'Animation mixer is not initialized or no actions are present.'
+      );
+      return;
+    }
 
-  // Find the animation clip by name
-  const clip = animations.find((clip) => clip.name === animationName);
+    // Find the animation clip by name
+    const clip = animations.find((clip) => clip.name === animationName);
 
-  if (clip) {
-    // Create animation action and play it
-    const animationAction = this.animationMixer.clipAction(clip);
-    console.log(clip, animationAction);
-    animationAction.play();
-  } else {
-    console.error(`Animation clip '${animationName}' not found.`);
+    if (clip) {
+      // Create animation action and play it
+      const animationAction = this.animationMixer.clipAction(clip);
+      animationAction.play();
+    } else {
+      console.error(`Animation clip '${animationName}' not found.`);
+    }
   }
-}
 
   setupDragControls() {
     const geometry = new THREE.BoxGeometry();
