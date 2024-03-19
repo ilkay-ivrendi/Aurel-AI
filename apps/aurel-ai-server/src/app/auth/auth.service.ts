@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { Credentials, LoginCredentials, UserProfile } from './auth-interfaces';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -9,26 +11,23 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async login(credentials: any): Promise<any> {
-    // Check if user with provided email exists
-    const user = await this.usersService.findByEmail(credentials.email);
+  async login(credentials: LoginCredentials): Promise<Credentials> {
+    const user = await this.validateUser(credentials);
     if (!user) {
       throw new Error('User not found');
     }
 
-    // Validate password
-    const isValidPassword = await this.usersService.validatePassword(
-      credentials.password,
-      user.password
-    );
-    if (!isValidPassword) {
-      throw new Error('Invalid password');
-    }
+    const payload = { username: user.username, sub: user.id };
+    const transformedUser = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      avatar: user.avatar ? user.avatar : `https://api.dicebear.com/8.x/adventurer/svg?seed=${user.id}`
+    };
 
-    // Generate and return JWT token
-    const payload = { username: user.username, sub: user.userId };
     return {
       access_token: this.jwtService.sign(payload),
+      user_data: transformedUser,
     };
   }
 
@@ -39,6 +38,17 @@ export class AuthService {
       throw new Error('User with this email already exists');
     }
 
+    const existingUserName = await this.usersService.findByUsername(
+      userData.username
+    );
+    if (existingUserName) {
+      throw new Error('User with this username already exists');
+    }
+
+    const hashPassword = await this.hashPassword(userData.password);
+    userData.password = hashPassword;
+
+    console.log('Hashed Password:', hashPassword, 'User:', userData);
     // Create new user
     await this.usersService.createUser(userData);
   }
@@ -53,12 +63,30 @@ export class AuthService {
     // sendEmail(email, 'Password Reset', `Click the following link to reset your password: ${resetLink}`);
   }
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findById(username);
-    if (user && user.password === pass) {
+  async validateUser(credentials: LoginCredentials): Promise<any> {
+    const user = await this.usersService.findByUsername(credentials.username);
+    const validatePassword = await this.validatePassword(
+      credentials.password,
+      user.password
+    );
+    
+    if (user && validatePassword) {
       const { password, ...result } = user;
       return result;
     }
     return null;
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    const saltRounds = 10; // Salt rounds for bcrypt hashing
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return hashedPassword;
+  }
+
+  async validatePassword(
+    password: string,
+    hashedPassword: string
+  ): Promise<boolean> {
+    return bcrypt.compare(password, hashedPassword);
   }
 }

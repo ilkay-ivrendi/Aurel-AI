@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormGroup,
@@ -14,10 +14,11 @@ import {
   MatFormFieldModule,
 } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'aurel-ai-register',
@@ -25,13 +26,13 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
     MatCardModule,
     FlexLayoutModule,
     MatButtonModule,
-    HttpClientModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -50,7 +51,9 @@ export class RegisterComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private _snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -69,11 +72,32 @@ export class RegisterComponent {
       console.log('Password:', this.registerForm.value.password);
       console.log('Full Form:', this.registerForm.value);
       // Here you can add your registration logic
-      this.authService.register(this.registerForm.value).subscribe(data=> {
-        console.log("Register request send to endpoint");
+      this.authService.register(this.registerForm.value).subscribe({
+        next: (value) => {
+          console.log('Next:', value);
+          if (value.error) {
+            this.openSnackBar(value.error, 'Close');
+          } else {
+            this.openSnackBar(value.message, 'Close');
+            console.log('Successfully Registered In. Redirecting...');
+            this.router.navigate(['/', 'login']);
+          }
+        },
+        error: (error) => {
+          console.log(error.error);
+          this.openSnackBar(error.message, 'Close');
+        },
+        complete: () => {
+          console.info('register form request complete!');
+        },
       });
     } else {
       console.log('Form is invalid');
+      this.openSnackBar('Form is invalid', '🤦‍♂️');
     }
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
   }
 }

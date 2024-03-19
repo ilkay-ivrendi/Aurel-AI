@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
+import { LoginCredentials, RegisterDTO } from './auth-interfaces';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -8,22 +9,23 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() userData: any) {
+  async register(@Body() userData: RegisterDTO) {
     try {
-      await this.authService.register(userData);
-      return { message: 'User registered successfully' };
+      const user = await this.authService.register(userData);
+      return { message: 'User registered successfully', user };
     } catch (error) {
       return { error: error.message };
     }
   }
 
   @Post('login')
-  async login(@Body() credentials: any) {
+  async login(@Body() credentials: LoginCredentials) {
     try {
-      const token = await this.authService.login(credentials);
-      return { token };
+      const data = await this.authService.login(credentials);
+      return { data };
     } catch (error) {
-      return { error: error.message };
+      // Return a meaningful error response with the appropriate status code
+      throw new UnauthorizedException('Invalid username or password');
     }
   }
 

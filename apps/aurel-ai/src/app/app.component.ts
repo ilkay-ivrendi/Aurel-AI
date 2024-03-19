@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [ RouterModule],
+  imports: [ RouterModule ],
   selector: 'aurel-ai-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

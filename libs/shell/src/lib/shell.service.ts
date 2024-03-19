@@ -3,7 +3,7 @@ import { ShellComponent } from './shell/shell.component';
 import { Route, Routes } from '@angular/router';
 import { AuthenticationGuard } from '@aurel-ai/auth';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ShellService {
  /**
@@ -17,6 +17,7 @@ export class ShellService {
       component: ShellComponent,
       children: routes,
       canActivate: [AuthenticationGuard],
+      providers: []
     };
   }
 }

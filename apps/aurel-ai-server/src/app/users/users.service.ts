@@ -10,12 +10,30 @@ export class UsersService {
   private userModel: Model<User>) {}
 
   async createUser(userDTO: CreateUserDto): Promise<any> {
-    const createdCat = new this.userModel(userDTO);
-    return createdCat.save();
+    const createdUser = new this.userModel(userDTO);
+    return createdUser.save();
   }
 
   async findByEmail(email: string): Promise<any> {
-    // Implement findByEmail logic here
+    try {
+      // Find the user by username using the UserModel
+      const user = await this.userModel.findOne({ email }).exec();
+      return user; // Return the found user or null if not found
+    } catch (error) {
+      // Handle any errors (e.g., database connection errors)
+      throw new Error(`Error finding user by email: ${error.message}`);
+    }
+  }
+
+  async findByUsername(username: string): Promise<any> {
+    try {
+      // Find the user by username using the UserModel
+      const user = await this.userModel.findOne({ username }).select('id username email password avatar').lean();
+      return user; // Return the found user or null if not found
+    } catch (error) {
+      // Handle any errors (e.g., database connection errors)
+      throw new Error(`Error finding user by username: ${error.message}`);
+    }
   }
 
   async validatePassword(password: string, hashedPassword: string): Promise<boolean> {

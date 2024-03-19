@@ -1,7 +1,12 @@
+export const credentialsKey = 'credentials';
+export interface Credentials {
+  access_token: string;
+  user_data: any;
+}
 export interface LoginCredentials {
   username: string;
   password: string;
-  rememberMe: string;
+  remember: boolean;
 }
 
 export interface RegisterCredentials {
@@ -9,3 +14,5 @@ export interface RegisterCredentials {
   password: string;
   email: string;
 }
+
+
