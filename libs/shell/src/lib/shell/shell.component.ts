@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, inject, signal } from '@angular/core';
+import { Component, Input, inject, signal } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -52,6 +52,7 @@ export class ShellComponent {
   private authenticationService = inject(AuthService);
   private router = inject(Router);
   private credentialsService = inject(CredentialsService);
+  
   user_data = signal(this.credentialsService.credentials?.user_data);
 
   isDarkMode: boolean = false;
@@ -61,12 +62,6 @@ export class ShellComponent {
       map((result) => result.matches),
       shareReplay()
     );
-
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    console.log(this.user_data());
-  }
 
   onThemeChanged() {
     const body = document.body;
