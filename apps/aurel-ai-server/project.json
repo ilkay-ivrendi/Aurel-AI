@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/aurel-ai-server/src",
   "projectType": "application",
+  "type": "module",
   "targets": {
     "serve": {
       "executor": "@nx/js:node",

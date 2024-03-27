@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: apps/aurel-ai/Dockerfile
     ports:
-      - "80:80"
+      - "4200:4200"
 
   mongo:
     image: mongo:latest

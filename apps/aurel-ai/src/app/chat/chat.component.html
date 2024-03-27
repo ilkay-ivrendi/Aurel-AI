@@ -7,13 +7,20 @@
     </mat-card-header>
 
     <mat-card-content class="messages" fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start stretch" #scrollMe>
-      <div *ngFor="let message of messages" class="message" [class.sent]="message.sender === 'Me'"
-        [class.received]="message.sender !== 'Me'">
+      <div *ngFor="let message of messages" class="message" [class.sent]="message.role === 'user'"
+        [class.received]="message.role !== 'user'">
         <div class="message-sender">{{ message.sender }}</div>
         <div class="message-content">{{ message.content }}</div>
         <div class="message-timestamp">{{ message.timestamp | date: 'shortTime' }}</div>
       </div>
+
+      <div class="message received" *ngIf="!messageLoaded()">
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+
     </mat-card-content>
+
+    
 
     <mat-card-actions fxLayoutAlign="center center">
       <div class="input-container">

@@ -9,11 +9,10 @@ export class ChatController {
 
   constructor(private readonly nlpService: NLPService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post()
-  async sendMessage(@Body() message: string) {
-    // Logic to send message to NLP model
+  async sendMessage(@Body() message: any) {
     const processedMessage = await this.nlpService.processMessage(message);
-    return { message: processedMessage };
+    return { data: processedMessage };
   }
 }

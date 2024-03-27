@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../auth.service';
-import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -22,8 +22,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
-import { Router } from '@angular/router';
-import { CredentialsService } from '../credentials.service';
 
 @Component({
   selector: 'aurel-ai-login',
@@ -73,8 +71,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       // Here you can add your authentication logic
       this.authService.login(this.loginForm.value).subscribe({
-        next: (value) => {
-          this.openSnackBar('Welcome ' + value.data.user_data.username, '👌');
+        next: (response) => {
+          this.openSnackBar('Welcome ' + response.data.user_data.username, '👌');
         },
         error: (e) => {
           if (e.status === 504) {
